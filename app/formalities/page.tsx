@@ -169,7 +169,7 @@ function StepItem({ step, index, completed, active, onToggle, onComplete }: {
                 </div>
 
                 {/* Warnings */}
-                {step.warnings?.length > 0 && (
+                {(step.warnings?.length ?? 0) > 0 && (
                   <div style={{ padding: '12px 14px', borderRadius: 0, background: 'var(--rose-d)', border: '1px solid rgba(250,117,96,0.15)' }}>
                     <div className="label" style={{ marginBottom: 8, color: 'var(--color-system-red)' }}>Watch Out</div>
                     <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 5 }}>
