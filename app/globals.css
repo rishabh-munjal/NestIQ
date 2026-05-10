@@ -1,26 +1,364 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;450;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+@import 'leaflet/dist/leaflet.css';
 
+/* ============================================
+   JASPER DESIGN SYSTEM — TOKENS
+============================================ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ── Colors ── */
+  --color-canvas-white:   #FFFFFF;
+  --color-smoke-gray:     #F9F9F9;
+  --color-graphite:       #5E5D5F;
+  --color-jasper-indigo:  #00063D;
+  --color-jasper-flame:   #FA4028;
+  --color-system-red:     #FA7560;
+  --color-system-green:   #103A00;
+  --color-research-green: #E6FFD9;
+  --color-highlight-blue: #0095FF;
+  --color-highlight-pink: #5A003C;
+  --color-highlight-yellow: #FFF67D;
+
+  /* ── Semantic aliases (used by components) ── */
+  --bg:       var(--color-canvas-white);
+  --surface:  var(--color-canvas-white);
+  --surface2: var(--color-smoke-gray);
+  --surface3: #EFEFEF;
+  --border:   rgba(0,6,61,0.10);
+  --border2:  rgba(0,6,61,0.22);
+  --text:     var(--color-jasper-indigo);
+  --muted:    var(--color-graphite);
+  --muted2:   #3A3940;
+
+  /* Semantic feedback colors */
+  --green:    var(--color-system-green);
+  --green-d:  var(--color-research-green);
+  --rose:     var(--color-system-red);
+  --rose-d:   rgba(250,117,96,0.10);
+  --amber:    #8A6A00;
+  --amber-d:  rgba(255,246,125,0.45);
+  --cyan:     var(--color-highlight-blue);
+  --cyan-d:   rgba(0,149,255,0.08);
+  --violet:   var(--color-jasper-indigo);
+  --violet-d: rgba(0,6,61,0.06);
+  --lime:     var(--color-system-green);
+  --lime-d:   var(--color-research-green);
+
+  /* ── Typography — Font Families ── */
+  --font-feature:      'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-abc-rom:      'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-abc-rom-mono: 'DM Mono', ui-monospace, 'Courier New', monospace;
+
+  /* ── Typography — Scale ── */
+  --text-caption:      14px;
+  --leading-caption:   1.4;
+  --tracking-caption:  -0.14px;
+
+  --text-body:         16px;
+  --leading-body:      1.4;
+  --tracking-body:     -0.16px;
+
+  --text-subheading:   18px;
+  --leading-subheading:1.4;
+  --tracking-subheading:-0.18px;
+
+  --text-heading-sm:   20px;
+  --leading-heading-sm:1.1;
+  --tracking-heading-sm:-0.6px;
+
+  --text-heading:      24px;
+  --leading-heading:   1.1;
+  --tracking-heading:  -0.72px;
+
+  --text-heading-lg:   28px;
+  --leading-heading-lg:1.1;
+  --tracking-heading-lg:-0.84px;
+
+  --text-display:      38px;
+  --leading-display:   1.05;
+  --tracking-display:  -1.14px;
+
+  --text-display-lg:   54px;
+  --leading-display-lg:1.05;
+  --tracking-display-lg:-1.62px;
+
+  --text-display-xl:   80px;
+  --leading-display-xl:1.00;
+  --tracking-display-xl:-2.4px;
+
+  /* ── Font Weights ── */
+  --font-weight-w450: 450;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  /* ── Spacing ── */
+  --spacing-4:   4px;
+  --spacing-8:   8px;
+  --spacing-12:  12px;
+  --spacing-16:  16px;
+  --spacing-20:  20px;
+  --spacing-24:  24px;
+  --spacing-32:  32px;
+  --spacing-40:  40px;
+  --spacing-48:  48px;
+  --spacing-80:  80px;
+  --spacing-96:  96px;
+  --spacing-100: 100px;
+  --spacing-108: 108px;
+  --spacing-112: 112px;
+  --spacing-164: 164px;
+  --spacing-240: 240px;
+
+  /* ── Layout ── */
+  --section-gap:   32px;
+  --card-padding:  12px;
+  --element-gap:   8px;
+
+  /* ── Border Radius ── */
+  --radius-badge:   4px;
+  --radius-default: 0px;
+  --radius-md:      4px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* ============================================
+   BASE
+============================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-abc-rom);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-body);
 }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--surface2); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 0; }
+
+/* ============================================
+   LAYOUT
+============================================ */
+.page-shell { min-height: 100vh; padding-top: 60px; background: var(--bg); }
+.container  { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+/* ============================================
+   CARDS — 0px radius, no box-shadow
+============================================ */
+.card {
+  background: var(--color-smoke-gray);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-default);
+  transition: border-color 0.2s;
+}
+.card-hover:hover {
+  border-color: var(--border2);
+}
+
+/* ============================================
+   TYPOGRAPHY
+============================================ */
+/* Feature — serif headlines */
+.heading {
+  font-family: var(--font-feature);
+  font-weight: 600;
+  color: var(--color-jasper-indigo);
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading);
+}
+
+/* Label — monospace utility text */
+.label {
+  font-family: var(--font-abc-rom-mono);
+  font-size: var(--text-caption);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-graphite);
+  line-height: var(--leading-caption);
+}
+
+/* ============================================
+   BUTTONS
+============================================ */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: none; border-radius: var(--radius-default);
+  font-family: var(--font-abc-rom);
+  font-weight: 500;
+  font-size: var(--text-body);
+  letter-spacing: var(--tracking-body);
+  cursor: pointer;
+  transition: opacity 0.15s, background 0.15s;
+  padding: 16px 20px;
+}
+
+/* Primary CTA — Jasper Flame */
+.btn-primary {
+  background: var(--color-jasper-flame);
+  color: var(--color-canvas-white);
+}
+.btn-primary:hover { opacity: 0.88; }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Secondary — ghost, Jasper Indigo text, no border */
+.btn-secondary {
+  background: transparent;
+  color: var(--color-jasper-indigo);
+  padding: 0;
+}
+.btn-secondary:hover { opacity: 0.65; }
+.btn-secondary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Ghost — subtle surface bg */
+.btn-ghost {
+  background: var(--violet-d);
+  color: var(--color-jasper-indigo);
+  border: 1px solid var(--border);
+  padding: 10px 16px;
+}
+.btn-ghost:hover { background: var(--border); }
+
+/* Cyan-ghost — repurposed for highlight-blue context */
+.btn-cyan-ghost {
+  background: var(--cyan-d);
+  color: var(--color-highlight-blue);
+  border: 1px solid rgba(0,149,255,0.2);
+  padding: 10px 16px;
+}
+.btn-cyan-ghost:hover { background: rgba(0,149,255,0.14); }
+
+/* ============================================
+   INPUTS — 0px radius
+============================================ */
+.input {
+  background: var(--color-canvas-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-default);
+  color: var(--color-jasper-indigo);
+  font-family: var(--font-abc-rom);
+  font-size: var(--text-caption);
+  letter-spacing: var(--tracking-caption);
+  padding: 10px 14px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.15s;
+}
+.input:focus { border-color: var(--color-jasper-indigo); }
+.input::placeholder { color: var(--color-graphite); }
+select.input option { background: var(--color-canvas-white); color: var(--color-jasper-indigo); }
+
+/* ============================================
+   BADGES — 4px radius
+============================================ */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--font-abc-rom-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: var(--tracking-caption);
+  padding: 4px 8px;
+  border-radius: var(--radius-badge);
+}
+
+/* New Research badge */
+.badge-green   { background: var(--color-research-green); color: var(--color-system-green); }
+/* Error/warning badge */
+.badge-red     { background: var(--rose-d);               color: var(--color-system-red); }
+/* Amber/warning */
+.badge-amber   { background: var(--amber-d);              color: var(--amber); }
+/* Dark badge */
+.badge-violet  { background: var(--color-jasper-indigo);  color: var(--color-canvas-white); }
+/* Light/area badge */
+.badge-cyan    { background: var(--color-smoke-gray);     color: var(--color-jasper-indigo); border: 1px solid var(--border); }
+/* Muted */
+.badge-muted   { background: var(--surface3);             color: var(--muted2); }
+.badge-lime    { background: var(--color-research-green); color: var(--color-system-green); }
+
+.badge-bullish { background: var(--color-research-green); color: var(--color-system-green); border: 1px solid rgba(16,58,0,0.15); }
+.badge-bearish { background: var(--rose-d);               color: var(--color-system-red);   border: 1px solid rgba(250,117,96,0.2); }
+.badge-neutral { background: var(--amber-d);              color: var(--amber);               border: 1px solid rgba(138,106,0,0.2); }
+
+/* Risk */
+.risk-low    { background: var(--color-research-green); color: var(--color-system-green); border-radius: var(--radius-badge); padding: 3px 8px; font-size: 11px; font-weight: 500; }
+.risk-medium { background: var(--amber-d);              color: var(--amber);               border-radius: var(--radius-badge); padding: 3px 8px; font-size: 11px; font-weight: 500; }
+.risk-high   { background: var(--rose-d);               color: var(--color-system-red);    border-radius: var(--radius-badge); padding: 3px 8px; font-size: 11px; font-weight: 500; }
+
+/* ============================================
+   PROGRESS
+============================================ */
+.progress-track { height: 3px; border-radius: 0; background: var(--surface3); overflow: hidden; }
+.progress-bar   { height: 100%; border-radius: 0; background: var(--color-jasper-flame); }
+
+/* ============================================
+   GRADIENT TEXT — Jasper Flame accent
+============================================ */
+.gradient-text {
+  color: var(--color-jasper-flame);
+}
+
+/* ============================================
+   KPI CHIP
+============================================ */
+.kpi-chip {
+  background: var(--color-smoke-gray);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-default);
+  padding: 18px 20px;
+}
+.kpi-value {
+  font-family: var(--font-feature);
+  font-weight: 600;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--color-jasper-indigo);
+}
+
+/* ============================================
+   MAP
+============================================ */
+.leaflet-container { background: #EEF0F6 !important; }
+.leaflet-control-zoom a {
+  background: var(--color-canvas-white) !important;
+  color: var(--color-jasper-indigo) !important;
+  border-color: var(--border) !important;
+  border-radius: 0 !important;
+}
+.leaflet-control-zoom a:hover { background: var(--color-smoke-gray) !important; }
+
+/* ============================================
+   ANIMATIONS
+============================================ */
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
+  background-size: 600px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+.pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fade-up 0.35s ease forwards; }
+
+/* ============================================
+   RECHARTS overrides
+============================================ */
+.recharts-text { fill: var(--color-graphite) !important; font-family: var(--font-abc-rom-mono) !important; }
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical   line { stroke: var(--border) !important; }
+.recharts-tooltip-wrapper { outline: none !important; }
